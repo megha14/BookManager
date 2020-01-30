@@ -46,9 +46,14 @@ public class BookManager {
      */
     public void printAllBooks(){
 
+        /* Call the getAllBooksFromLibrary method from BookRepoIml to
+           get list of all books. Print the id and book name to show user
+           all the books. And an option to choose one id to see the details*/
         books = bookRepo.getAllBooksFromLibrary();
         System.out.println("\n==== View Books ====\n");
         printBooksHelper(books);
+
+        /* Give option to user to choose an id to see that book's details */
         while (true) {
             System.out.println("\nTo view details enter the book ID, to return press <Enter>.");
             System.out.print("Book ID: ");
@@ -86,9 +91,15 @@ public class BookManager {
      * @return no return value
      */
     public void editBook() {
+
+        /* Call the getAllBooksFromLibrary method from BookRepoIml to
+           get list of all books. Print the id and book name to give user
+           choice from which to choose a book to edit */
         books = bookRepo.getAllBooksFromLibrary();
         System.out.println("\n==== Edit a Book ====\n");
         printBooksHelper(books);
+
+        /* Take id from user as input to choose the book to edit */
         while (true) {
             System.out.println("\nEnter the book ID of the book you want to edit; to return press <Enter>.");
             System.out.print("Book ID: ");
@@ -115,7 +126,13 @@ public class BookManager {
      * @return no return value
      */
     public void updateBookDetails(int id) {
+
+        /* Call the getBookFromLibrary method from BookRepoIml to
+           get the required book to be updated and store it into book object. */
         Book book = bookRepo.getBookFromLibrary(id);
+
+        /* Take the book's title, author, and description as input from the user
+           to be updated */
         System.out.println("\nInput the following information. To leave a field unchanged, hit <Enter>\n");
         Scanner sc = new Scanner(System.in);
         String title = null, author = null, description = null;
@@ -128,6 +145,10 @@ public class BookManager {
         System.out.print("\t "+"Description: "+book.getDescription()+": <Enter> ");
         description = sc.nextLine();
         description = (description.equals("")) ? book.getDescription() : description;
+
+        /* Call the updateBookInLibrary method from BookRepoIml and
+        send the details to be saved to database. Print correct messages
+         based on the return value */
         boolean edit = bookRepo.updateBookInLibrary(id, title, author, description);
         if(edit)
             System.out.println("Book saved");
@@ -143,6 +164,9 @@ public class BookManager {
     public void addBookDetails(){
         System.out.println("\n==== Add a Book ====\n");
         System.out.println("Please enter the following information:");
+
+        /* Take the book's title, author, and description as input from the user
+           and store them in book object */
         Book book = new Book();
         Scanner sc = new Scanner(System.in);
         System.out.print("\t "+"Title: ");
@@ -154,6 +178,10 @@ public class BookManager {
         System.out.print("\t "+"Description: ");
         String d = sc.nextLine();
         book.setDescription(d);
+
+        /* Call the addBookToLibrary method from BookRepoIml and
+        send the book object to be saved to database. Print correct messages
+         based on the return value */
         int add = bookRepo.addBookToLibrary(book);
         if(add != 0){
             System.out.println("\nBook ["+add+"] Saved");
@@ -184,14 +212,22 @@ public class BookManager {
      * @return no return value
      */
     public void searchBooks(){
+
         System.out.println("\n==== Search ====\n");
         System.out.println("Type in one or more keywords to search for\n");
+
+        /* Get input search string from user*/
         Scanner sc = new Scanner(System.in);
         System.out.print("\t "+"Search: ");
         String search = sc.nextLine();
+
+        /* Call the searchForBook method from BookRepoIml and
+        print the returned Books list */
         books = bookRepo.searchForBook(search);
         System.out.println("The following books matched your query. Enter the book ID to see more details, or <Enter> to return.\n");
         printBooksHelper(books);
+
+        /* Print detail of books returned during search based on users choice */
         while(true){
             System.out.println();
             System.out.print("Book ID: ");
@@ -205,8 +241,10 @@ public class BookManager {
                 }else
                     printBookDetails(ID);
             }
-
         }
+
+        /* Once user doesn't want to see any more book details,
+        return to main menu */
         start();
     }
 
@@ -228,6 +266,11 @@ public class BookManager {
      * @return no return value
      */
     public void saveToDisk(){
+
+        /* Call the saveLibrary method from BookRepoIml to save
+           the library to disk. Then based on the return value print the
+           library saved or corresponding error along with option to try again.
+        */
         boolean save = bookRepo.saveLibrary();
         if(save){
             System.out.println("Library saved.\n");
@@ -246,28 +289,32 @@ public class BookManager {
     public void start() {
         // write your code here
 
+        /* Start with printing the main menu */
         printMainMenu();
+
+        /* Take input from the user */
         Scanner sc = new Scanner(System.in);
         Integer choice = 0;
         choice = Integer.parseInt(sc.nextLine());
 
-            switch (choice) {
-                case 1:
-                    printAllBooks();
-                    break;
-                case 2:
-                    addBookDetails();
-                    break;
-                case 3:
-                    editBook();
-                    break;
-                case 4:
-                    searchBooks();
-                    break;
-                case 5:
-                    saveToDisk();
-                    break;
-            }
+        /* Based on the input direct the flow to the correct method */
+        switch (choice) {
+            case 1:
+                printAllBooks();
+                break;
+            case 2:
+                addBookDetails();
+                break;
+            case 3:
+                editBook();
+                break;
+            case 4:
+                searchBooks();
+                break;
+            case 5:
+                saveToDisk();
+                break;
+        }
     }
 
     /**
@@ -276,7 +323,11 @@ public class BookManager {
      * @return no return value
      */
     public void loadBooksFromDisk(){
-        bookRepo = new BookRepoImpl();
+
+        /* Call the loadLibrary method from BookRepoIml to load
+           the library from disk. Then based on the return value print the
+           number of books loaded or corresponding error.
+        */
         boolean loaded = bookRepo.loadLibrary();
         if(loaded){
             books = bookRepo.getAllBooksFromLibrary();
@@ -293,6 +344,8 @@ public class BookManager {
      * @param args not used
      */
     public static void main(String args[]){
+
+        /* Start the application by calling the loadBooksFromDisk method */
         BookManager bookManager = new BookManager();
         bookManager.loadBooksFromDisk();
 
