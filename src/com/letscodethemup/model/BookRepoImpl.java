@@ -8,16 +8,31 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * BookRepoImpl.java
+ * Purpose: Implements the methods that are required to read, insert, update from the database
+ *
+ * @author Megha Rastogi
+ * @version 1.0 1/30/2020
+ */
 public class BookRepoImpl implements BookRepository {
 
     DatabaseUtils databaseUtils;
     DatabaseConnection databaseConnection;
 
+    /**
+     * Constructor to instantiate this class and initialize required objects .
+     */
     public BookRepoImpl() {
         databaseUtils = new DatabaseUtils();
         databaseConnection = new DatabaseConnection();
     }
 
+    /**
+     * Get all books from the database
+     *
+     * @return list of Book objects
+     */
     @Override
     public List<Book> getAllBooksFromLibrary() {
         Connection connection = databaseConnection.getConnection();
@@ -42,6 +57,12 @@ public class BookRepoImpl implements BookRepository {
         return null;
     }
 
+    /**
+     * Get book with given id from the database
+     *
+     * @param id integer
+     * @return  Book object
+     */
     @Override
     public Book getBookFromLibrary(int id) {
         Connection connection = databaseConnection.getConnection();
@@ -63,6 +84,12 @@ public class BookRepoImpl implements BookRepository {
         return null;
     }
 
+    /**
+     * Add a given book object to the database
+     *
+     * @param book object
+     * @return integer representing book stored (1) or not
+     */
     @Override
     public int addBookToLibrary(Book book) {
         Connection connection = databaseConnection.getConnection();
@@ -84,6 +111,15 @@ public class BookRepoImpl implements BookRepository {
         return id;
     }
 
+    /**
+     * Update a given book with new details to the database
+     *
+     * @param id integer
+     * @param title string
+     * @param author string
+     * @param description string
+     * @return boolean representing book updated or not
+     */
     @Override
     public boolean updateBookInLibrary(int id, String title, String author, String description) {
         Connection connection = databaseConnection.getConnection();
@@ -105,6 +141,12 @@ public class BookRepoImpl implements BookRepository {
         return false;
     }
 
+    /**
+     * Search for books containing given string
+     *
+     * @param search string
+     * @return list of Book objects
+     */
     @Override
     public List<Book> searchForBook(String search) {
         Connection connection = databaseConnection.getConnection();
@@ -129,18 +171,23 @@ public class BookRepoImpl implements BookRepository {
         return null;
     }
 
+    /**
+     * Save library to disk
+     *
+     * @return boolean, library saved or not
+     */
     @Override
     public boolean saveLibrary() {
 
         String command = "mysqldump -u"+ databaseUtils.getUser()+ " -p"+databaseUtils.getPass()+" " +databaseUtils.getDatabaseName()+" -r " +databaseUtils.getBackupPath();
-        System.out.println(command);
+        //System.out.println(command);
         Process process;
         try {
             Runtime runtime = Runtime.getRuntime();
             process = runtime.exec(command);
 
             int processComplete = process.waitFor();
-            System.out.println(processComplete);
+            //System.out.println(processComplete);
             if (processComplete == 0) {
                 return true;
             }
@@ -150,24 +197,29 @@ public class BookRepoImpl implements BookRepository {
         return false;
     }
 
+    /**
+     * Load books from disk to database.
+     *
+     * @return boolean, library loaded or not
+     */
     @Override
-    public List<Book> loadLibrary() {
+    public boolean loadLibrary() {
         String[] command = new String[]{"mysql", "--user=" + databaseUtils.getUser(), "--password=" + databaseUtils.getPass(), databaseUtils.getDatabaseName(),"-e", " source "+databaseUtils.getBackupPath()};
 
-        System.out.println(command);
+        //System.out.println(command);
         Process process;
         try {
             Runtime runtime = Runtime.getRuntime();
             process = runtime.exec(command);
             int processComplete = process.waitFor();
-            System.out.println(processComplete);
+            //System.out.println(processComplete);
             if (processComplete == 0) {
-                return getAllBooksFromLibrary();
+                return true;
             }
         }catch (Exception e){
             e.printStackTrace();
         }
-        return null;
+        return false;
     }
 
 }

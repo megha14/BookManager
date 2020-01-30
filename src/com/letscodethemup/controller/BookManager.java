@@ -5,16 +5,30 @@ import com.letscodethemup.model.BookRepoImpl;
 import java.util.List;
 import java.util.Scanner;
 
-
+/**
+ * BookManager.java
+ * Purpose: Acts as controller between the CLI and the model class
+ *
+ * @author Megha Rastogi
+ * @version 1.0 1/30/2020
+ */
 public class BookManager {
 
     private BookRepoImpl bookRepo;
     private List<Book> books;
 
+    /**
+     * Constructor to instantiate this class and initialize required objects .
+     */
     BookManager(){
         bookRepo = new BookRepoImpl();
     }
 
+    /**
+     * Method to print the main menu
+     *
+     * @return no return values
+     */
     public void printMainMenu(){
         System.out.println("\n==== Book Manager ====\n");
         System.out.println("\t 1) View all books");
@@ -25,6 +39,11 @@ public class BookManager {
         System.out.print("Choose [1-5]: ");
     }
 
+    /**
+     * Method to print all books fetched from the database
+     *
+     * @return no return values
+     */
     public void printAllBooks(){
 
         books = bookRepo.getAllBooksFromLibrary();
@@ -49,10 +68,23 @@ public class BookManager {
         start();
     }
 
+    /**
+     * Helper Method to check whether given input is greater than smallest ID
+     * in the list of books and less than the highest ID in the list of books
+     *
+     * @param ID Integer representing the input from user
+     * @param books List of Book objects
+     * @return boolean
+     */
     public boolean checkIdBounds(int ID, List<Book> books){
         return ID < books.get(0).getId() || ID > books.get(books.size()-1).getId();
     }
 
+    /**
+     * Method to ask ID of the book the user wants to edit
+     *
+     * @return no return value
+     */
     public void editBook() {
         books = bookRepo.getAllBooksFromLibrary();
         System.out.println("\n==== Edit a Book ====\n");
@@ -74,6 +106,14 @@ public class BookManager {
         }
         start();
     }
+
+    /**
+     * Helper Method to get the details of the book user wants to edit
+     * Then call the appropriate method to update the details in database.
+     *
+     * @param id integer
+     * @return no return value
+     */
     public void updateBookDetails(int id) {
         Book book = bookRepo.getBookFromLibrary(id);
         System.out.println("\nInput the following information. To leave a field unchanged, hit <Enter>\n");
@@ -95,6 +135,11 @@ public class BookManager {
             System.out.println("Couldn't update the book. Something went wrong. Please try again!");
     }
 
+    /**
+     * Method to get the book details from user and add it to database
+     *
+     * @return no return value
+     */
     public void addBookDetails(){
         System.out.println("\n==== Add a Book ====\n");
         System.out.println("Please enter the following information:");
@@ -118,6 +163,12 @@ public class BookManager {
         start();
     }
 
+    /**
+     * Method to print the details of a particular book
+     *
+     * @param id book to be printed
+     * @return no return value
+     */
     public void printBookDetails(int id){
         Book book = bookRepo.getBookFromLibrary(id);
         System.out.println("\n\t "+"ID: "+book.getId());
@@ -126,6 +177,12 @@ public class BookManager {
         System.out.println("\t "+"Description: "+book.getDescription());
     }
 
+    /**
+     * Method to get the search string from the user and return the
+     * books matching that string.
+     *
+     * @return no return value
+     */
     public void searchBooks(){
         System.out.println("\n==== Search ====\n");
         System.out.println("Type in one or more keywords to search for\n");
@@ -153,13 +210,24 @@ public class BookManager {
         start();
     }
 
+    /**
+     * Helper Method to print all books from the list
+     *
+     * @param books arraylist containing all Book objects
+     * @return no return value
+     */
     public void printBooksHelper(List<Book> books){
         for (Book book : books) {
             System.out.println("\t "+"["+book.getId()+"] "+book.getTitle());
         }
     }
 
-    public void saveToLibrary(){
+    /**
+     * Method to save database to file
+     *
+     * @return no return value
+     */
+    public void saveToDisk(){
         boolean save = bookRepo.saveLibrary();
         if(save){
             System.out.println("Library saved.\n");
@@ -169,6 +237,12 @@ public class BookManager {
         }
     }
 
+    /**
+     * Method to display main menu to user and
+     * switch to correct method based on user's choice
+     *
+     * @return no return value
+     */
     public void start() {
         // write your code here
 
@@ -191,15 +265,21 @@ public class BookManager {
                     searchBooks();
                     break;
                 case 5:
-                    saveToLibrary();
+                    saveToDisk();
                     break;
             }
     }
 
-    public void initialize(){
+    /**
+     * Method to load the database from the disk.
+     *
+     * @return no return value
+     */
+    public void loadBooksFromDisk(){
         bookRepo = new BookRepoImpl();
-        books = bookRepo.loadLibrary();
-        if(books != null){
+        boolean loaded = bookRepo.loadLibrary();
+        if(loaded){
+            books = bookRepo.getAllBooksFromLibrary();
             System.out.println("Loaded "+books.size()+" books from the library.\n");
             start();
         }else{
@@ -207,9 +287,14 @@ public class BookManager {
         }
     }
 
+    /**
+     * The main method begins execution of the Book Manager Application.
+     *
+     * @param args not used
+     */
     public static void main(String args[]){
         BookManager bookManager = new BookManager();
-        bookManager.initialize();
+        bookManager.loadBooksFromDisk();
 
     }
 }
