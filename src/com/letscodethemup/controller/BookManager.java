@@ -1,7 +1,7 @@
-package com.company.controller;
+package com.letscodethemup.controller;
 
-import com.company.model.Book;
-import com.company.model.BookRepoImpl;
+import com.letscodethemup.model.Book;
+import com.letscodethemup.model.BookRepoImpl;
 import java.util.List;
 import java.util.Scanner;
 

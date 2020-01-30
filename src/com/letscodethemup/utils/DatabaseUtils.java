@@ -1,4 +1,4 @@
-package com.company.utils;
+package com.letscodethemup.utils;
 
 public class DatabaseUtils {
 

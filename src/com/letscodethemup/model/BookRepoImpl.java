@@ -1,10 +1,9 @@
-package com.company.model;
+package com.letscodethemup.model;
 
-import com.company.model.connection.DatabaseConnection;
-import com.company.model.repository.BookRepository;
-import com.company.utils.DatabaseUtils;
+import com.letscodethemup.model.connection.DatabaseConnection;
+import com.letscodethemup.model.repository.BookRepository;
+import com.letscodethemup.utils.DatabaseUtils;
 
-import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;

@@ -1,6 +1,6 @@
-package com.company.model.repository;
+package com.letscodethemup.model.repository;
 
-import com.company.model.Book;
+import com.letscodethemup.model.Book;
 
 import java.util.List;
 

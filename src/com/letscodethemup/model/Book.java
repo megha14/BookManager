@@ -1,4 +1,4 @@
-package com.company.model;
+package com.letscodethemup.model;
 
 public class Book {
     private int id;

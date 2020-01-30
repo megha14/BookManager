@@ -1,6 +1,6 @@
-package com.company.model.connection;
+package com.letscodethemup.model.connection;
 
-import com.company.utils.DatabaseUtils;
+import com.letscodethemup.utils.DatabaseUtils;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
