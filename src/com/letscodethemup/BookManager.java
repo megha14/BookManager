@@ -1,4 +1,4 @@
-package com.letscodethemup.controller;
+package com.letscodethemup;
 
 import com.letscodethemup.model.Book;
 import com.letscodethemup.model.BookRepoImpl;

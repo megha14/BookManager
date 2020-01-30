@@ -10,6 +10,11 @@ package com.letscodethemup.utils;
  */
 public class DatabaseUtils {
 
+    /**
+     * You can change the values of user, pass, host, port, backupPath
+     * based on your system and MySQL settings.
+     */
+
     private String user = "dummy";
     private String pass = "dummy";
     private String host = "localhost";
