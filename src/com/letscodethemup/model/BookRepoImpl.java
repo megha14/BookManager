@@ -37,9 +37,9 @@ public class BookRepoImpl implements BookRepository {
     public List<Book> getAllBooksFromLibrary() {
         Connection connection = databaseConnection.getConnection();
         List<Book> allBooks = new ArrayList<Book>();
-        try {
+        try (
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM book");
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM book")){
 
             while (resultSet.next()) {
                 Book book = new Book();
@@ -66,9 +66,9 @@ public class BookRepoImpl implements BookRepository {
     @Override
     public Book getBookFromLibrary(int id) {
         Connection connection = databaseConnection.getConnection();
-        try {
+        try (
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM book WHERE id = " + id);
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM book WHERE id = " + id)){
             if (resultSet.next()) {
                 Book book = new Book();
                 book.setId(id);
@@ -94,8 +94,8 @@ public class BookRepoImpl implements BookRepository {
     public int addBookToLibrary(Book book) {
         Connection connection = databaseConnection.getConnection();
         int id = 0;
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO book VALUES (NULL, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+        try (
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO book VALUES (NULL, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)){
             preparedStatement.setString(1, book.getTitle());
             preparedStatement.setString(2, book.getAuthor());
             preparedStatement.setString(3, book.getDescription());
@@ -123,8 +123,8 @@ public class BookRepoImpl implements BookRepository {
     @Override
     public boolean updateBookInLibrary(int id, String title, String author, String description) {
         Connection connection = databaseConnection.getConnection();
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE book SET title=?, author=?, description=? WHERE id=?");
+        try (
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE book SET title=?, author=?, description=? WHERE id=?")){
             preparedStatement.setString(1, title);
             preparedStatement.setString(2, author);
             preparedStatement.setString(3, description);
@@ -151,9 +151,9 @@ public class BookRepoImpl implements BookRepository {
     public List<Book> searchForBook(String search) {
         Connection connection = databaseConnection.getConnection();
         List<Book> allBooks = new ArrayList<Book>();
-        try {
+        try (
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM book WHERE (title like '%"+search+"%')");
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM book WHERE (title like '%"+search+"%')")){
 
             while (resultSet.next()) {
                 Book book = new Book();
