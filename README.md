@@ -27,6 +27,9 @@ Download the whole code or just the [BookManager.jar](https://github.com/megha14
   PRIMARY KEY (id)
   );
  ```
+4. Insert some values into the table - `INSERT INTO book (title, author, description) VALUES ('Moby Dick','Herman Melville','About a big whale');`
+5. Create backup of the database - `mysqldump -u dummy -pdummy books > /Users/Megha/temp/backup.sql;`
+   Change the username, password and backup location based on your system.
 
 ### Changes in Code
 
